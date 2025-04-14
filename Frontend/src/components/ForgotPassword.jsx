@@ -10,6 +10,8 @@ import {
   Select,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -43,17 +45,37 @@ const ForgotPassword = () => {
 
       // Check if OTP was sent successfully
       if (response.status === 200) {
-        alert("OTP sent successfully to your email.");
+        // Replace alert with toast notification
+        toast.success("OTP sent successfully to your email!", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar:false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        
         const generatedOTP = response.data.otp;
         localStorage.setItem("otp", generatedOTP);
 
-        navigate("/otp"); // Navigate to OTP verification page
+        // Add a small delay before navigation to allow the user to see the toast
+        setTimeout(() => {
+          navigate("/otp"); // Navigate to OTP verification page
+        },3500);
       }
     } catch (error) {
-      // Handle email not found error
+      // Handle email not found error with toast
       if (error.response && error.response.status === 404) {
+        toast.error("Email not found in our database.", {
+          position: "top-right",
+          autoClose: 4000,
+        });
         setError("Email not found in our database.");
       } else {
+        toast.error("Failed to send OTP. Please try again.", {
+          position: "top-right",
+          autoClose: 4000,
+        });
         setError("Failed to send OTP. Please try again.");
       }
       console.error("Error sending OTP:", error);
@@ -63,7 +85,21 @@ const ForgotPassword = () => {
   };
 
   return (
-    <Box display="flex" height="100vh" width="100vw">
+    <Box display="flex" height="98vh" width="98vw">
+      {/* Toast Container - This will render toast messages */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      
       {/* Left Section */}
       <Box
         flex={1}
@@ -93,24 +129,21 @@ const ForgotPassword = () => {
 
       {/* Right Section */}
       <Box
-        flex={1}
-        alignItems="center"
-        justifyContent="center"
-        bgcolor="#FAFAFA"
+          flex={1}
+          display="flex"
+          flexDirection="column"
+          bgcolor="#FFFFFF"
+          sx={{ 
+            height: "100%",
+            overflow: "hidden",
+          }}
       >
-        <Container component="main" maxWidth="md">
-          <Box
-            textAlign="center"
-            p={4}
-            borderRadius={6}
-            sx={{ bgcolor: "white", boxShadow: 3 }}
-          >
-            {/* Language selector and login link at the top */}
-            <Box
+         <Box
               display="flex"
               justifyContent="space-between"
               alignItems="center"
-              mb={20}
+              mx={24}
+              mt={2}
             >
               <Select
                 value="en"
@@ -125,24 +158,57 @@ const ForgotPassword = () => {
               <Typography variant="body2">
                 Already have an account?{" "}
                 <Button
-                  onClick={() => {
-                    navigate("/login");
-                  }}
-                  variant="text"
-                  sx={{
-                    textTransform: "none",
-                    width: "65px",
-                    text: "#111111",
-                    backgroundColor: " #8BD4E7",
-                    p: 0,
-                    minWidth: 0,
-                  }}
-                >
-                  Login
-                </Button>
+              onClick={() => navigate("/login")}
+              variant="contained"
+              size="small"
+              sx={{
+                textTransform: "none",
+                backgroundColor: "#8BD4E7",
+                color: "#000",
+                boxShadow: "none",
+                borderRadius: "4px",
+                px: 2,
+                "&:hover": {
+                  backgroundColor: "#7ac5d8",
+                  boxShadow: "none",
+                }
+              }}
+            >
+              Login
+            </Button>
               </Typography>
             </Box>
-
+        <Container component="main" maxWidth="md"   sx={{ 
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop: 12,
+            height: "auto",
+            width: "auto",
+            px: { xs: 2, sm: 4 },
+            py: 4,
+            border: "0.5px solid gray",
+            borderRadius: "32px"
+          }}>
+          <Box
+            textAlign="center"
+            p={4}
+            borderRadius={6}
+          >
+            <Box 
+            sx={{
+              width: "48px",
+              height: "48px",
+              borderRadius: "50%",
+              backgroundColor: "#8BD4E7",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              ml: "190px",
+              mb: "20px"
+            }}
+          />
+          
             {/* Main form content */}
             <Typography variant="h5" fontWeight="bold" gutterBottom>
               Forgot Password

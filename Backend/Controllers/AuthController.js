@@ -2,7 +2,7 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-// Register User
+
 export const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -12,19 +12,15 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: "User already exists!" });
     }
 
-    // const salt = await bcrypt.genSalt(10);
-    // const hashedPassword = await bcrypt.hash(password, salt);
-    // console.log("register hashed",hashedPassword);
-
     const newUser = new User({ name, email, password });
-     await newUser.save()
-     const token = jwt.sign(
+    await newUser.save();
+    const token = jwt.sign(
       { id: User._id, role: User.role },
       process.env.JWT_SECRET,
       {
         expiresIn: "7d",
       }
-    );;
+    );
 
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
@@ -39,9 +35,9 @@ export const loginUser = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: "User not found" });
-    console.log("Stored Hashed Password:", user.password);
+
     const isMatch = await bcrypt.compare(password, user.password);
-    
+
     if (!isMatch)
       return res.status(400).json({ message: "Invalid credentials" });
 

@@ -12,15 +12,19 @@ import {
   IconButton,
   Alert,
   Snackbar,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
-import axios from "axios"; // Import axios
+import axios from "axios";
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -136,10 +140,8 @@ const SignUp = () => {
         password: formData.password,
       });
 
-      
       setSuccess(true);
 
-     
       setTimeout(() => {
         navigate("/login");
       }, 2000);
@@ -162,7 +164,17 @@ const SignUp = () => {
   };
 
   return (
-    <Box display="flex" height="100vh" width="100vw">
+    <Box 
+      display="flex" 
+      flexDirection={isMobile ? "column" : "row"} 
+      height="98vh" 
+      width="98vw"
+      sx={{
+        overflow: "hidden",
+        maxHeight: "100vh",
+        maxWidth: "100vw",
+      }}
+    >
       {/* Left Section */}
       <Box
         flex={1}
@@ -175,7 +187,8 @@ const SignUp = () => {
           alignItems: "center",
           justifyContent: "center",
           color: "white",
-          padding: 4,
+    
+          // padding: 4,
         }}
       >
         <Box textAlign="center" maxWidth="300px">
@@ -193,97 +206,153 @@ const SignUp = () => {
       {/* Right Section */}
       <Box
         flex={1}
-        alignItems="center"
-        justifyContent="center"
-        bgcolor="#FAFAFA"
+        display="flex"
+        flexDirection="column"
+        bgcolor="#FFFFFF"
+        sx={{ 
+          height: "100%",
+          overflow: "hidden",
+        }}
       >
-        <Container component="main" maxWidth="md">
-          <Box
+        {/* Header with language selector and login link */}
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mx={24}
+          mt={2}
+         
+        >
+          <Select
+            value="en"
+            size="small"
+            sx={{
+              fontSize: "0.8rem",
+              "& .MuiSelect-select": { py: 0.5 },
+              "& .MuiOutlinedInput-notchedOutline": { borderColor: "#e0e0e0" },
+            }}
+            renderValue={(value) => "English (United States)"}
+          >
+            <MenuItem value="en">English (United States)</MenuItem>
+          </Select>
+          
+          <Box display="flex" alignItems="center">
+            <Typography variant="body2" sx={{ mr: 1, color: "#666" }}>
+              Already have an account?
+            </Typography>
+            <Button
+              onClick={() => navigate("/login")}
+              variant="contained"
+              size="small"
+              sx={{
+                textTransform: "none",
+                backgroundColor: "#8BD4E7",
+                color: "#000",
+                boxShadow: "none",
+                borderRadius: "4px",
+                px: 2,
+                "&:hover": {
+                  backgroundColor: "#7ac5d8",
+                  boxShadow: "none",
+                }
+              }}
+            >
+              Login
+            </Button>
+          </Box>
+        </Box>
+
+        <Container 
+          component="main" 
+          maxWidth="sm"
+          sx={{ 
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop:12,
+            height: "auto",
+            px: { xs: 2, sm: 4 },
+            py: 4,
+            border:"0.5px solid gray",
+            borderRadius:"32px"
+          }}
+        >
+          {/* Blue circle icon */}
+          <Box 
+            sx={{
+              width: "48px",
+              height: "48px",
+              borderRadius: "50%",
+              backgroundColor: "#8BD4E7",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              mb: 2,
+            }}
+          />
+
+          {/* Form content */}
+          <Box 
             component="form"
             onSubmit={handleSubmit}
+            width="100%"
             textAlign="center"
-            p={4}
-            borderRadius={6}
-            sx={{ bgcolor: "white", boxShadow: 3 }}
           >
-            {/* Language selector and login link at the top */}
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              mb={4}
+            <Typography 
+              variant="h5" 
+              sx={{ 
+                fontWeight: 500, 
+                mb: 1,
+                color: "#333"
+              }}
             >
-              <Select
-                value="en"
-                size="small"
-                sx={{
-                  fontSize: "0.875rem",
-                  "& .MuiSelect-select": { py: 0.5 },
-                }}
-              >
-                <MenuItem value="en">English (United States) </MenuItem>
-              </Select>
-              <Typography variant="body2">
-                Already have an account?{" "}
-                <Button
-                  onClick={() => {
-                    navigate("/login");
-                  }}
-                  variant="text"
-                  sx={{
-                    textTransform: "none",
-                    width: "65px",
-                    color: "#111111",
-                    backgroundColor: "#8BD4E7",
-                    p: 0,
-                    minWidth: 0,
-                  }}
-                >
-                  Login
-                </Button>
-              </Typography>
-            </Box>
-
-            {/* Main form content */}
-            <Typography variant="h5" fontWeight="bold" gutterBottom>
               Create an account
             </Typography>
+            
             <Typography
               variant="body2"
               color="textSecondary"
-              gutterBottom
-              sx={{ mb: 3 }}
+              sx={{ mb: 4 }}
             >
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi
-              lobortis maximus
+              lobortis maximus mauris.
             </Typography>
 
-            <TextField
-              label="Full Name"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleInputChange}
-              fullWidth
-              margin="normal"
-              size="small"
-              sx={{ mb: 1.5 }}
-              error={!!formErrors.fullName}
-              helperText={formErrors.fullName}
-            />
-
-            <TextField
-              label="Email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              fullWidth
-              margin="normal"
-              size="small"
-              sx={{ mb: 1.5 }}
-              error={!!formErrors.email}
-              helperText={formErrors.email}
-            />
+            <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
+              <TextField
+                label="Full Name"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleInputChange}
+                fullWidth
+                size="small"
+                error={!!formErrors.fullName}
+                helperText={formErrors.fullName}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "4px",
+                  }
+                }}
+              />
+              
+              <TextField
+                label="Email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                fullWidth
+                size="small"
+                error={!!formErrors.email}
+                helperText={formErrors.email}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "4px",
+                  }
+                }}
+              />
+            </Box>
 
             <TextField
               label="Password"
@@ -292,7 +361,6 @@ const SignUp = () => {
               value={formData.password}
               onChange={handleInputChange}
               fullWidth
-              margin="normal"
               size="small"
               InputProps={{
                 endAdornment: (
@@ -303,17 +371,22 @@ const SignUp = () => {
                       size="small"
                     >
                       {showPassword ? (
-                        <VisibilityOffIcon />
+                        <VisibilityOffIcon fontSize="small" />
                       ) : (
-                        <VisibilityIcon />
+                        <VisibilityIcon fontSize="small" />
                       )}
                     </IconButton>
                   </InputAdornment>
                 ),
               }}
-              sx={{ mb: 1.5 }}
               error={!!formErrors.password}
               helperText={formErrors.password}
+              sx={{
+                mb: 2,
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "4px",
+                }
+              }}
             />
 
             <TextField
@@ -323,7 +396,6 @@ const SignUp = () => {
               value={formData.confirmPassword}
               onChange={handleInputChange}
               fullWidth
-              margin="normal"
               size="small"
               InputProps={{
                 endAdornment: (
@@ -334,17 +406,22 @@ const SignUp = () => {
                       size="small"
                     >
                       {showConfirmPassword ? (
-                        <VisibilityOffIcon />
+                        <VisibilityOffIcon fontSize="small" />
                       ) : (
-                        <VisibilityIcon />
+                        <VisibilityIcon fontSize="small" />
                       )}
                     </IconButton>
                   </InputAdornment>
                 ),
               }}
-              sx={{ mb: 1.5 }}
               error={!!formErrors.confirmPassword}
               helperText={formErrors.confirmPassword}
+              sx={{
+                mb: 2,
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "4px",
+                }
+              }}
             />
 
             <FormControlLabel
@@ -354,21 +431,31 @@ const SignUp = () => {
                   checked={formData.agreeToTerms}
                   onChange={handleInputChange}
                   size="small"
+                  sx={{
+                    color: "#8BD4E7",
+                    '&.Mui-checked': {
+                      color: "#8BD4E7",
+                    },
+                  }}
                 />
               }
               label={
-                <Typography variant="body2">
+                <Typography variant="body2" sx={{ fontSize: "0.8rem" }}>
                   By creating an account, I agree to our <b>Terms of use</b> and{" "}
                   <b>Privacy Policy</b>
                 </Typography>
               }
-              sx={{ display: "block", textAlign: "left", mt: 1, mb: 2 }}
+              sx={{ 
+                display: "block", 
+                textAlign: "left", 
+                mb: 2,
+              }}
             />
             {formErrors.agreeToTerms && (
               <Typography
                 variant="caption"
                 color="error"
-                sx={{ textAlign: "left", display: "block", mt: -1, mb: 1 }}
+                sx={{ textAlign: "left", display: "block", mt: -1, mb: 2 }}
               >
                 {formErrors.agreeToTerms}
               </Typography>
@@ -380,15 +467,20 @@ const SignUp = () => {
               fullWidth
               disabled={loading}
               sx={{
-                mt: 1,
                 backgroundColor: "#8BD4E7",
-                "&:hover": { bgcolor: "#42A5F5" },
+                color: "#000",
                 textTransform: "none",
-                py: 1,
-                fontSize: "0.9375rem",
+                py: 1.5,
+                borderRadius: "24px",
+                fontWeight: 500,
+                "&:hover": {
+                  backgroundColor: "#7ac5d8",
+                  boxShadow: "none",
+                },
+                boxShadow: "none",
               }}
             >
-              {loading ? "Processing..." : "Sign Up"}
+              {loading ? "Processing..." : "Sign up"}
             </Button>
           </Box>
         </Container>
@@ -399,6 +491,7 @@ const SignUp = () => {
         open={!!error || success}
         autoHideDuration={6000}
         onClose={closeSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
         <Alert
           onClose={closeSnackbar}

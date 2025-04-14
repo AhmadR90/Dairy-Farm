@@ -111,12 +111,10 @@ const Login = () => {
         localStorage.setItem("authToken", response.data.token);
       }
 
-     
       setTimeout(() => {
         navigate("/dashboard");
       }, 1000);
     } catch (err) {
-   
       const errorMessage =
         err.response?.data?.message ||
         err.response?.data?.error ||
@@ -134,7 +132,7 @@ const Login = () => {
   };
 
   return (
-    <Box display="flex" height="100vh" width="100vw">
+    <Box display="flex" height="98vh" width="98vw">
       {/* Left Section */}
       <Box
         flex={1}
@@ -147,7 +145,7 @@ const Login = () => {
           alignItems: "center",
           justifyContent: "center",
           color: "white",
-          padding: 4,
+          // padding: 4,
         }}
       >
         <Box textAlign="center" maxWidth="300px">
@@ -163,61 +161,101 @@ const Login = () => {
       </Box>
 
       {/* Right Section */}
+
       <Box
         flex={1}
         display="flex"
-        alignItems="center"
-        justifyContent="center"
-        bgcolor="#FAFAFA"
+        flexDirection="column"
+        bgcolor="#FFFFFF"
+        sx={{
+          height: "100%",
+          overflow: "hidden",
+        }}
       >
-        <Container component="main" maxWidth="md">
+        {/* Header with language selector and login link */}
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mx={24}
+          mt={2}
+        >
+          <Select
+            value="en"
+            size="small"
+            sx={{
+              fontSize: "0.8rem",
+              "& .MuiSelect-select": { py: 0.5 },
+              "& .MuiOutlinedInput-notchedOutline": { borderColor: "#e0e0e0" },
+            }}
+            renderValue={(value) => "English (United States)"}
+          >
+            <MenuItem value="en">English (United States)</MenuItem>
+          </Select>
+
+          <Box display="flex" alignItems="center">
+            <Typography variant="body2" sx={{ mr: 1, color: "#666" }}>
+              Don't have an account?
+            </Typography>
+            <Button
+              onClick={() => navigate("/")}
+              variant="contained"
+              size="small"
+              sx={{
+                textTransform: "none",
+                backgroundColor: "#8BD4E7",
+                color: "#000",
+                boxShadow: "none",
+                borderRadius: "4px",
+                px: 2,
+                "&:hover": {
+                  backgroundColor: "#7ac5d8",
+                  boxShadow: "none",
+                },
+              }}
+            >
+              Sign Up
+            </Button>
+          </Box>
+        </Box>
+
+        <Container
+          component="main"
+          maxWidth="sm"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop: 12,
+            height: "auto",
+            px: { xs: 2, sm: 4 },
+            py: 4,
+            border: "0.5px solid gray",
+            borderRadius: "32px",
+          }}
+        >
           <Box
             component="form"
             onSubmit={handleSubmit}
             textAlign="center"
             p={4}
             borderRadius={6}
-            sx={{ bgcolor: "white", boxShadow: 3 }}
           >
-          
             <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              mb={6} // Reduced margin to center form better
-            >
-              <Select
-                value="en"
-                size="small"
-                sx={{
-                  fontSize: "0.875rem",
-                  "& .MuiSelect-select": { py: 0.5 },
-                }}
-              >
-                <MenuItem value="en">English (United States) </MenuItem>
-              </Select>
-              <Typography variant="body2">
-                Don't have an account?{" "}
-                <Button
-                  onClick={() => {
-                    navigate("/");
-                  }}
-                  variant="text"
-                  sx={{
-                    textTransform: "none",
-                    width: "65px",
-                    color: "#111111",
-                    backgroundColor: "#8BD4E7",
-                    p: 0,
-                    minWidth: 0,
-                  }}
-                >
-                  Sign Up
-                </Button>
-              </Typography>
-            </Box>
+              sx={{
+                width: "48px",
+                height: "48px",
+                borderRadius: "50%",
+                backgroundColor: "#8BD4E7",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                ml: "210px",
+                mb: "20px",
+              }}
+            />
 
-            {/* Main form content */}
             <Typography variant="h5" fontWeight="bold" gutterBottom>
               Login
             </Typography>
