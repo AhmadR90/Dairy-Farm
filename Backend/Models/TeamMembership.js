@@ -33,4 +33,4 @@ const teamMembershipSchema = new Schema({
 teamMembershipSchema.index({ team_id: 1, user_id: 1 }, { unique: true });
 
 const TeamMembership = mongoose.model('TeamMembership', teamMembershipSchema);
-module.exports = TeamMembership;
+export default TeamMembership;

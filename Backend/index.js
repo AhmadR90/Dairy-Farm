@@ -9,6 +9,11 @@ import TeamRoutes from "./Routes/TeamRoutes.js";
 import businessRoutes from "./Routes/BussinessRoutes.js";
 import roleRoutes from "./Routes/roleRoutes.js";
 import projectRoutes from"./Routes/projectRoutes.js"
+import businessMembershipRoutes from"./Routes/BusinessMembershipRoutes.js";
+import teamMembershipRoutes from "./Routes/TeamMembershipRoutes.js";  
+import permissionRoutes from "./Routes/PermissionRoutes.js"; 
+import rolePermissionRoutes from"./Routes/RolePermissionRoutes.js"
+import chatMessageRoutes from "./Routes/ChatRoutes.js";
 dotenv.config();
 connectDB();
 
@@ -24,6 +29,11 @@ app.use("/api/Team", TeamRoutes);
 app.use("/api/businesses", businessRoutes);
 app.use("/api/roles", roleRoutes);
 app.use("/api/projects", projectRoutes);
+app.use("/api/business-memberships", businessMembershipRoutes);
+app.use("/api/team-memberships", teamMembershipRoutes);
+app.use("/api/permissions", permissionRoutes);
+app.use('/api/role-permissions', rolePermissionRoutes);
+app.use('/api/messages', chatMessageRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

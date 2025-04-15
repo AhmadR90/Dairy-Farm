@@ -41,4 +41,4 @@ const businessMembershipSchema = new Schema({
 // businessMembershipSchema.index({ business_id: 1, user_id: 1 }, { unique: true });
 
 const BusinessMembership = mongoose.model('BusinessMembership', businessMembershipSchema);
-module.exports = BusinessMembership;
+export default BusinessMembership;

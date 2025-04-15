@@ -25,5 +25,5 @@ const permissionSchema = new Schema({
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 });
 
-const Permission = mongoose.model('Permission', permissionSchema);
-module.exports = Permission;
+const Permission = mongoose.model('Permissions', permissionSchema);
+export default Permission;
