@@ -22,11 +22,11 @@ const chatMessageSchema = new Schema({
   sentAt: { type: Date, default: Date.now },
 });
 
-// Validating that either receiver_id or team_id is provided, but not both
+// // Validating that either receiver_id or team_id is provided, but not both
 chatMessageSchema.pre("validate", function (next) {
   if (
-    (this.receiver_id && this.team_id) ||
-    (!this.receiver_id && !this.team_id)
+    (this.receiverId && this.teamId) ||
+    (!this.receiverId && !this.teamId)
   ) {
     next(
       new Error("Either receiver_id or team_id must be provided, but not both")

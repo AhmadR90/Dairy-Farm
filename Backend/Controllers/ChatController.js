@@ -1,10 +1,54 @@
-import ChatMessage from "../Models/ChatSchema.js";
 
 // Send a new chat message
+// export const sendMessage = async (req, res) => {
+//   try {
+//     const { businessId, senderId, receiverId, teamId, content, type } = req.body;
+
+//     const newMessage = new ChatMessage({
+//       businessId,
+//       senderId,
+//       receiverId,
+//       teamId,
+//       content,
+//       type,
+//     });
+
+//     await newMessage.save();
+
+//     res.status(201).json({ message: "Message sent", data: newMessage });
+//   } catch (error) {
+//     res.status(500).json({ message: "Error sending message", error: error.message });
+//   }
+// };
+import ChatMessage from "../Models/ChatSchema.js";
+import BusinessMembership from "../Models/BussinessMembership.js";
+import Team from "../Models/TeamSchema.js";
+
 export const sendMessage = async (req, res) => {
   try {
     const { businessId, senderId, receiverId, teamId, content, type } = req.body;
 
+    // 1. Verify user exists and belongs to the business
+    const user = await BusinessMembership.findOne({ user_id: senderId, business_id:businessId });
+    if (!user) {
+      return res.status(403).json({ message: "Sender not part of the business." });
+    }
+
+    // 2. If it's a group message, check that user is in the team
+    if (teamId) {
+      const team = await Team.findOne({ _id: teamId, business_id:businessId });
+      if (!team) {
+        return res.status(404).json({ message: "Team not found in this business." });
+      }
+
+      // check if sender is a member of the team
+    //   const isMember = team.members.includes(senderId);
+    //   if (!isMember) {
+    //     return res.status(403).json({ message: "Sender is not part of the team." });
+    //   }
+    }
+
+    // 3. Save message
     const newMessage = new ChatMessage({
       businessId,
       senderId,
@@ -21,6 +65,7 @@ export const sendMessage = async (req, res) => {
     res.status(500).json({ message: "Error sending message", error: error.message });
   }
 };
+
 
 // Get messages between two users (direct chat)
 export const getUserMessages = async (req, res) => {

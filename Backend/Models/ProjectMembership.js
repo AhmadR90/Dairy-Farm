@@ -33,4 +33,4 @@ const projectMembershipSchema = new Schema({
 projectMembershipSchema.index({ project_id: 1, user_id: 1 }, { unique: true });
 
 const ProjectMembership = mongoose.model('ProjectMembership', projectMembershipSchema);
-module.exports = ProjectMembership;
+export default ProjectMembership;

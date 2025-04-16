@@ -14,6 +14,8 @@ import teamMembershipRoutes from "./Routes/TeamMembershipRoutes.js";
 import permissionRoutes from "./Routes/PermissionRoutes.js"; 
 import rolePermissionRoutes from"./Routes/RolePermissionRoutes.js"
 import chatMessageRoutes from "./Routes/ChatRoutes.js";
+import milestoneRoutes from"./Routes/MilestoneRoutes.js"
+import projectMembershipRoutes from "./Routes/ProjectMembershipRoutes.js"
 dotenv.config();
 connectDB();
 
@@ -34,6 +36,8 @@ app.use("/api/team-memberships", teamMembershipRoutes);
 app.use("/api/permissions", permissionRoutes);
 app.use('/api/role-permissions', rolePermissionRoutes);
 app.use('/api/messages', chatMessageRoutes);
+app.use("/api/milestones", milestoneRoutes);
+app.use("/api/memberships", projectMembershipRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
